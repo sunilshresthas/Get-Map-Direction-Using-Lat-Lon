@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Directions service</title>
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 100%;
+      }
+#floating-panel {
+  position: absolute;
+  top: 10px;
+  left: 25%;
+  z-index: 5;
+  background-color: #fff;
+  padding: 5px;
+  border: 1px solid #999;
+  text-align: center;
+  font-family: 'Roboto','sans-serif';
+  line-height: 30px;
+  padding-left: 10px;
+}
+
+    </style>
+  </head>
+  <body>
+  
+    <div id="floating-panel">
+    <b>Start: </b>
+	<!--
+    <select id="start" onchange="calcRoute();">
+      <option value="kathmandu, nep">Kathmandu</option>
+      <option value="pokhara, nep">Pokhara</option>
+      <option value="butwal, nep">Butwal</option>
+	  <option value="narayanghat, nep">Narayanghat</option>
+	  <option value="nepalgunj, nep">Nepalgunj</option>
+    </select> -->
+	<input type="text" id="startLat" name="startLat" placeholder="Lat" />
+	<input type="text" id="startLon" name="startLon" placeholder="Lon" />
+    <b>End: </b>
+		<!--
+    <select id="end" onchange="calcRoute();">
+      <option value="kathmandu, nep">Kathmandu</option>
+      <option value="pokhara, nep">Pokhara</option>
+      <option value="butwal, nep">Butwal</option>
+      <option value="narayanghat, nep">Narayanghat</option>
+	  <option value="nepalgunj, nep">Nepalgunj</option>
+    </select> -->
+	<input type="text" id="endLat" name="endLat" placeholder="Lat" />
+	<input type="text" id="endLon" name="endLon" placeholder="Lon" />
+	<button name="submit" onclick="calculateAndDisplayRoute();" >Submit</button>
+    </div>
+    <div id="map"></div>
+    <script>
+	var directionsService = '';
+	var directionsDisplay = '';
+function initMap() {
+  directionsService = new google.maps.DirectionsService;
+  directionsDisplay = new google.maps.DirectionsRenderer;
+  var map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 7,
+    center: {lat: 27.7090319, lng: 85.2911134}
+  });
+  directionsDisplay.setMap(map);
+
+  }
+
+function calculateAndDisplayRoute() {
+console.log("m here");
+	var startLat = Number(document.getElementById('startLat').value);
+	var startLon = Number(document.getElementById('startLon').value);
+	var endLat = Number(document.getElementById('endLat').value);
+	var endLon = Number(document.getElementById('endLon').value);
+	console.log(startLat);
+  directionsService.route({
+    origin: {lat: startLat, lng: startLon},
+    destination: {lat: endLat, lng: endLon},
+    travelMode: google.maps.TravelMode.DRIVING
+  }, function(response, status) {
+    if (status === google.maps.DirectionsStatus.OK) {
+      directionsDisplay.setDirections(response);
+    } else {
+      window.alert('Directions request failed due to ' + status);
+    }
+  });
+}
+
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBIPvdXGR9rbire6vTp__2sOd7kx9PexBA&signed_in=true&callback=initMap"
+        async defer></script>
+  </body>
+</html>
